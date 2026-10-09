@@ -1,0 +1,82 @@
+const VOCAB = [
+  { id:'greetings', name:'Chào hỏi', icon:'👋', words:[
+    { en:'hello', ipa:'/həˈloʊ/', vi:'xin chào', ex:'Hello, how are you?' },
+    { en:'goodbye', ipa:'/ˌɡʊdˈbaɪ/', vi:'tạm biệt', ex:'Goodbye, see you tomorrow.' },
+    { en:'good morning', ipa:'/ɡʊd ˈmɔːrnɪŋ/', vi:'chào buổi sáng', ex:'Good morning, teacher!' },
+    { en:'good night', ipa:'/ɡʊd naɪt/', vi:'chúc ngủ ngon', ex:'Good night, mom.' },
+    { en:'thank you', ipa:'/θæŋk juː/', vi:'cảm ơn', ex:'Thank you very much.' },
+    { en:'sorry', ipa:'/ˈsɒri/', vi:'xin lỗi', ex:'I am sorry for being late.' },
+    { en:'please', ipa:'/pliːz/', vi:'làm ơn', ex:'Please help me.' },
+    { en:'excuse me', ipa:'/ɪkˈskjuːz miː/', vi:'xin lỗi (gây chú ý)', ex:'Excuse me, where is the bank?' },
+    { en:'welcome', ipa:'/ˈwelkəm/', vi:'chào mừng', ex:'Welcome to Vietnam!' },
+    { en:'nice to meet you', ipa:'/naɪs tə miːt juː/', vi:'rất vui được gặp bạn', ex:'Nice to meet you, Nam.' }
+  ]},
+  { id:'numbers', name:'Số đếm', icon:'🔢', words:[
+    { en:'one', ipa:'/wʌn/', vi:'một', ex:'I have one book.' },
+    { en:'two', ipa:'/tuː/', vi:'hai', ex:'Two cats are sleeping.' },
+    { en:'three', ipa:'/θriː/', vi:'ba', ex:'Three apples, please.' },
+    { en:'four', ipa:'/fɔːr/', vi:'bốn', ex:'Four seasons in a year.' },
+    { en:'five', ipa:'/faɪv/', vi:'năm', ex:'Give me five minutes.' },
+    { en:'six', ipa:'/sɪks/', vi:'sáu', ex:'Six eggs in the box.' },
+    { en:'seven', ipa:'/ˈsevn/', vi:'bảy', ex:'Seven days a week.' },
+    { en:'eight', ipa:'/eɪt/', vi:'tám', ex:'Eight hours of sleep.' },
+    { en:'nine', ipa:'/naɪn/', vi:'chín', ex:'Nine students in class.' },
+    { en:'ten', ipa:'/ten/', vi:'mười', ex:'Ten fingers on hands.' },
+    { en:'hundred', ipa:'/ˈhʌndrəd/', vi:'trăm', ex:'One hundred dollars.' },
+    { en:'thousand', ipa:'/ˈθaʊznd/', vi:'nghìn', ex:'A thousand people came.' }
+  ]},
+  { id:'colors', name:'Màu sắc', icon:'🎨', words:[
+    { en:'red', ipa:'/red/', vi:'đỏ', ex:'The apple is red.' },
+    { en:'blue', ipa:'/bluː/', vi:'xanh dương', ex:'The sky is blue.' },
+    { en:'green', ipa:'/ɡriːn/', vi:'xanh lá', ex:'Green grass in the park.' },
+    { en:'yellow', ipa:'/ˈjeloʊ/', vi:'vàng', ex:'The sun is yellow.' },
+    { en:'black', ipa:'/blæk/', vi:'đen', ex:'A black cat.' },
+    { en:'white', ipa:'/waɪt/', vi:'trắng', ex:'White clouds.' },
+    { en:'orange', ipa:'/ˈɔːrɪndʒ/', vi:'cam', ex:'An orange orange.' },
+    { en:'purple', ipa:'/ˈpɜːrpl/', vi:'tím', ex:'Purple flowers.' },
+    { en:'pink', ipa:'/pɪŋk/', vi:'hồng', ex:'Pink dress.' },
+    { en:'brown', ipa:'/braʊn/', vi:'nâu', ex:'Brown eyes.' }
+  ]},
+  { id:'family', name:'Gia đình', icon:'👨‍👩‍👧', words:[
+    { en:'father', ipa:'/ˈfɑːðər/', vi:'bố', ex:'My father is a doctor.' },
+    { en:'mother', ipa:'/ˈmʌðər/', vi:'mẹ', ex:'My mother cooks well.' },
+    { en:'brother', ipa:'/ˈbrʌðər/', vi:'anh/em trai', ex:'I have one brother.' },
+    { en:'sister', ipa:'/ˈsɪstər/', vi:'chị/em gái', ex:'My sister is a teacher.' },
+    { en:'son', ipa:'/sʌn/', vi:'con trai', ex:'Their son is smart.' },
+    { en:'daughter', ipa:'/ˈdɔːtər/', vi:'con gái', ex:'My daughter loves music.' },
+    { en:'grandfather', ipa:'/ˈɡrænfɑːðər/', vi:'ông', ex:'My grandfather is 80.' },
+    { en:'grandmother', ipa:'/ˈɡrænmʌðər/', vi:'bà', ex:'Grandmother tells stories.' },
+    { en:'uncle', ipa:'/ˈʌŋkl/', vi:'chú/bác', ex:'My uncle lives in Hue.' },
+    { en:'aunt', ipa:'/ænt/', vi:'cô/dì', ex:'Aunt Lan is kind.' },
+    { en:'family', ipa:'/ˈfæməli/', vi:'gia đình', ex:'I love my family.' },
+    { en:'baby', ipa:'/ˈbeɪbi/', vi:'em bé', ex:'The baby is sleeping.' }
+  ]},
+  { id:'animals', name:'Động vật', icon:'🐾', words:[
+    { en:'dog', ipa:'/dɒɡ/', vi:'chó', ex:'The dog is barking.' },
+    { en:'cat', ipa:'/kæt/', vi:'mèo', ex:'My cat is white.' },
+    { en:'bird', ipa:'/bɜːrd/', vi:'chim', ex:'Birds fly in the sky.' },
+    { en:'fish', ipa:'/fɪʃ/', vi:'cá', ex:'Fish live in water.' },
+    { en:'tiger', ipa:'/ˈtaɪɡər/', vi:'hổ', ex:'Tiger is a wild animal.' },
+    { en:'lion', ipa:'/ˈlaɪən/', vi:'sư tử', ex:'The lion is the king.' },
+    { en:'elephant', ipa:'/ˈelɪfənt/', vi:'voi', ex:'Elephants are huge.' },
+    { en:'monkey', ipa:'/ˈmʌŋki/', vi:'khỉ', ex:'Monkeys love bananas.' },
+    { en:'horse', ipa:'/hɔːrs/', vi:'ngựa', ex:'The horse runs fast.' },
+    { en:'cow', ipa:'/kaʊ/', vi:'bò', ex:'Cows give milk.' },
+    { en:'pig', ipa:'/pɪɡ/', vi:'lợn', ex:'The pig is pink.' },
+    { en:'chicken', ipa:'/ˈtʃɪkɪn/', vi:'gà', ex:'Chicken is delicious.' }
+  ]},
+  { id:'food', name:'Thức ăn', icon:'🍜', words:[
+    { en:'rice', ipa:'/raɪs/', vi:'cơm', ex:'I eat rice every day.' },
+    { en:'bread', ipa:'/bred/', vi:'bánh mì', ex:'Bread and butter.' },
+    { en:'water', ipa:'/ˈwɔːtər/', vi:'nước', ex:'Drink more water.' },
+    { en:'coffee', ipa:'/ˈkɒfi/', vi:'cà phê', ex:'A cup of coffee.' },
+    { en:'tea', ipa:'/tiː/', vi:'trà', ex:'Green tea is healthy.' },
+    { en:'milk', ipa:'/mɪlk/', vi:'sữa', ex:'Milk is good for kids.' },
+    { en:'apple', ipa:'/ˈæpl/', vi:'táo', ex:'An apple a day.' },
+    { en:'banana', ipa:'/bəˈnænə/', vi:'chuối', ex:'Monkeys eat bananas.' },
+    { en:'meat', ipa:'/miːt/', vi:'thịt', ex:'I do not eat meat.' },
+    { en:'fish', ipa:'/fɪʃ/', vi:'cá', ex:'Fish is fresh.' },
+    { en:'egg', ipa:'/eɡ/', vi:'trứng', ex:'Two eggs, please.' },
+    { en:'noodle', ipa:'/ˈnuːdl/', vi:'mì', ex:'I like noodles.' }
+  ]}
+];
