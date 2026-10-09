@@ -131,7 +131,7 @@ function doTranslate() {
     return;
   }
   document.getElementById('translateResult').innerHTML = '<div class="result">Đang dịch...</div>';
-  fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+  fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
     method: 'POST', headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ contents: [{ parts: [{ text: `Dịch sang tiếng Việt và giải thích ngắn gọn ngữ pháp: "${text}"` }] }] })
   })
