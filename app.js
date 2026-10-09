@@ -1,5 +1,5 @@
 /* ========== CẤU HÌNH ========== */
-const GEMINI_KEY = 'AQ.Ab8RN6K52QJPEi3vPD9OmQh8ZR2NrJz9gHctm8mR08wB0hGrUg';
+const GEMINI_KEY = 'AQ.Ab8RN6IepxTXVbgwNuXmXR1A24uAfRtkYVffAnvRvVIMzvjuJw';
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
 const SKILL_ICONS = { nghe:'🎧', noi:'🎤', doc:'📖', viet:'✏️', dich:'🌐' };
 
