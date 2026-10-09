@@ -132,15 +132,24 @@ function doTranslate() {
   }
   document.getElementById('translateResult').innerHTML = '<div class="result">Đang dịch...</div>';
   fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
-    method: 'POST', headers: {'Content-Type': 'application/json'},
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ contents: [{ parts: [{ text: `Dịch sang tiếng Việt và giải thích ngắn gọn ngữ pháp: "${text}"` }] }] })
   })
   .then(r => r.json())
   .then(d => {
-    const t = d.candidates?.[0]?.content?.parts?.[0]?.text || 'Không dịch được';
-    document.getElementById('translateResult').innerHTML = `<div class="result">${t}</div>`;
+    if (d.error) {
+      document.getElementById('translateResult').innerHTML = `<div class="result" style="background:#ffebee;color:#c62828"><b>Lỗi từ Google:</b><br>${d.error.message}<br><br><b>Code:</b> ${d.error.code}<br><b>Status:</b> ${d.error.status || ''}</div>`;
+      return;
+    }
+    const t = d.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!t) {
+      document.getElementById('translateResult').innerHTML = `<div class="result" style="background:#fff3e0">Phản hồi lạ: <pre style="white-space:pre-wrap;font-size:12px">${JSON.stringify(d).substring(0,500)}</pre></div>`;
+      return;
+    }
+    document.getElementById('translateResult').innerHTML = `<div class="result">${t.replace(/\n/g,'<br>')}</div>`;
   })
-  .catch(e => { document.getElementById('translateResult').innerHTML = `<div class="result">Lỗi: ${e.message}</div>`; });
+  .catch(e => { document.getElementById('translateResult').innerHTML = `<div class="result" style="background:#ffebee">Lỗi mạng: ${e.message}</div>`; });
 }
 
 /* ========== CÀI ĐẶT ========== */
