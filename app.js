@@ -1,4 +1,5 @@
 /* ========== CẤU HÌNH ========== */
+const GEMINI_KEY = 'AQ.Ab8RN6IgAxPBdsNQnzkjSHfXbPgLhUvzoLlt-911uYrx9ELcgA';
 const GEMINI_MODEL = 'gemini-3.5-flash-lite';
 const SKILL_ICONS = { nghe:'🎧', noi:'🎤', doc:'📖', viet:'✏️', dich:'🌐' };
 
@@ -40,7 +41,6 @@ function showPage(name) {
   if (name === 'home') updateStats();
   if (name === 'roadmap') renderRoadmap();
   if (name === 'vocab') renderVocab();
-  if (name === 'settings') loadSettings();
   if (name === 'translate') updateTranslateUI();
 }
 
@@ -128,8 +128,6 @@ function speakText(text, lang) {
 /* ========== DỊCH 2 CHIỀU ========== */
 let currentDir = localStorage.getItem('translate_dir') || 'en-vi';
 
-function getGeminiKey() { return localStorage.getItem('gemini_key') || ''; }
-
 function updateTranslateUI() {
   const isEnVi = currentDir === 'en-vi';
   const title = document.getElementById('translateTitle');
@@ -155,19 +153,17 @@ function swapDirection() {
 function doTranslate() {
   const text = document.getElementById('translateInput').value.trim();
   if (!text) return;
-  const key = getGeminiKey();
-  if (!key) {
-    alert('Chưa có Gemini API key. Vào Cài đặt để nhập.');
-    showPage('settings');
+  if (!GEMINI_KEY || GEMINI_KEY.includes('KEY-THAT-CUA-BAN')) {
+    alert('Chưa cấu hình GEMINI_KEY trong app.js. Mở file app.js sửa dòng 2.');
     return;
   }
   const isEnVi = currentDir === 'en-vi';
   const prompt = isEnVi
-    ? `Dịch sang tiếng Việt và giải thích ngắn gọn ngữ pháp: "${text}"`
-    : `Dịch sang tiếng Anh và giải thích ngắn gọn ngữ pháp: "${text}"`;
+    ? 'Dịch sang tiếng Việt và giải thích ngắn gọn ngữ pháp: "' + text + '"'
+    : 'Dịch sang tiếng Anh và giải thích ngắn gọn ngữ pháp: "' + text + '"';
 
   document.getElementById('translateResult').innerHTML = '<div class="result">Đang dịch...</div>';
-  fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${key}`, {
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + GEMINI_KEY, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -175,44 +171,17 @@ function doTranslate() {
   .then(r => r.json())
   .then(d => {
     if (d.error) {
-      let hint = '';
-      if (d.error.message && d.error.message.includes('models/')) {
-        const match = d.error.message.match(/models\/([a-z0-9.-]+)/);
-        if (match) hint = `<br><br><b>💡 Gợi ý:</b> Đổi <code>GEMINI_MODEL</code> trong app.js thành <code>${match[1]}</code>`;
-      }
-      document.getElementById('translateResult').innerHTML = `<div class="result" style="background:#ffebee;color:#c62828"><b>Lỗi từ Google:</b><br>${d.error.message}${hint}<br><br><b>Code:</b> ${d.error.code}</div>`;
+      document.getElementById('translateResult').innerHTML = '<div class="result" style="background:#ffebee;color:#c62828"><b>Lỗi:</b><br>' + d.error.message + '<br><br><b>Code:</b> ' + d.error.code + '</div>';
       return;
     }
     const t = d.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!t) {
-      document.getElementById('translateResult').innerHTML = `<div class="result" style="background:#fff3e0">Phản hồi lạ: <pre style="white-space:pre-wrap;font-size:12px">${JSON.stringify(d).substring(0,500)}</pre></div>`;
+      document.getElementById('translateResult').innerHTML = '<div class="result" style="background:#fff3e0">Không có kết quả</div>';
       return;
     }
-    document.getElementById('translateResult').innerHTML = `<div class="result">${t.replace(/\n/g,'<br>')}</div>`;
+    document.getElementById('translateResult').innerHTML = '<div class="result">' + t.replace(/\n/g,'<br>') + '</div>';
   })
-  .catch(e => { document.getElementById('translateResult').innerHTML = `<div class="result" style="background:#ffebee">Lỗi mạng: ${e.message}</div>`; });
-}
-
-/* ========== CÀI ĐẶT ========== */
-function loadSettings() {
-  const k = getGeminiKey();
-  document.getElementById('geminiKeyInput').value = k;
-  document.getElementById('keyStatus').innerHTML = k ? '<span style="color:#2e7d32">✅ Đã có key</span>' : '<span style="color:#c62828">❌ Chưa có key</span>';
-}
-
-function saveKey() {
-  const k = document.getElementById('geminiKeyInput').value.trim();
-  if (!k) { alert('Vui lòng nhập key'); return; }
-  localStorage.setItem('gemini_key', k);
-  alert('Đã lưu key!');
-  loadSettings();
-}
-
-function clearKey() {
-  if (!confirm('Xóa Gemini API key?')) return;
-  localStorage.removeItem('gemini_key');
-  document.getElementById('geminiKeyInput').value = '';
-  loadSettings();
+  .catch(e => { document.getElementById('translateResult').innerHTML = '<div class="result" style="background:#ffebee">Lỗi mạng: ' + e.message + '</div>'; });
 }
 
 /* ========== TỪ VỰNG / FLASHCARD ========== */
