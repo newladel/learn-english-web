@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#3f51b5">
+<title>Learn English</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="page-home" class="page active">
+  <div class="header"><h1>Học Tiếng Anh 0 → Thành thạo</h1></div>
+  <div class="container">
+    <div class="stats">
+      <div class="stat orange"><div class="label">Streak</div><div class="value" id="streakVal">0 ngày</div></div>
+      <div class="stat green"><div class="label">Đã học</div><div class="value" id="doneVal">0 bài</div></div>
+      <div class="stat purple"><div class="label">Từ vựng</div><div class="value" id="vocabVal">0 từ</div></div>
+    </div>
+    <button class="btn-big indigo" onclick="showPage('roadmap')">
+      <div class="icon">📚</div>
+      <div class="text"><div class="title">Lộ trình học</div><div class="sub">A0 → C1, đủ 5 kỹ năng</div></div>
+      <div class="arrow">›</div>
+    </button>
+    <button class="btn-big orange" onclick="showPage('vocab')">
+      <div class="icon">🃏</div>
+      <div class="text"><div class="title">Từ vựng (Flashcard)</div><div class="sub">Học & ôn theo spaced repetition</div></div>
+      <div class="arrow">›</div>
+    </button>
+    <button class="btn-big teal" onclick="showPage('translate')">
+      <div class="icon">🌐</div>
+      <div class="text"><div class="title">Dịch Anh - Việt</div><div class="sub">Gemini AI dịch + giải thích</div></div>
+      <div class="arrow">›</div>
+    </button>
+    <button class="btn-big purple" onclick="showPage('settings')">
+      <div class="icon">⚙️</div>
+      <div class="text"><div class="title">Cài đặt</div><div class="sub">Gemini API key</div></div>
+      <div class="arrow">›</div>
+    </button>
+  </div>
+</div>
+
+<div id="page-roadmap" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Lộ trình học</h1></div>
+  <div class="container" id="roadmapList"></div>
+</div>
+
+<div id="page-lesson" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('roadmap')">‹</button><h1 id="lessonTitle"></h1></div>
+  <div class="container" id="lessonBody"></div>
+</div>
+
+<div id="page-vocab" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Từ vựng</h1></div>
+  <div class="container">
+    <button class="btn-big purple" onclick="reviewAll()" style="margin-bottom:20px">
+      <div class="icon">🔁</div>
+      <div class="text"><div class="title">Ôn tập tất cả</div><div class="sub" id="reviewInfo">Đang tải...</div></div>
+      <div class="arrow">›</div>
+    </button>
+    <h3 style="margin-bottom:12px;font-size:16px">Chọn chủ đề</h3>
+    <div class="topic-grid" id="topicGrid"></div>
+  </div>
+</div>
+
+<div id="page-vocab-learn" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('vocab')">‹</button><h1 id="vocabTitle"></h1></div>
+  <div class="container" id="vocabBody"></div>
+</div>
+
+<div id="page-translate" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Dịch Anh - Việt</h1></div>
+  <div class="container">
+    <div class="translate-box">
+      <textarea id="translateInput" placeholder="Nhập câu tiếng Anh..."></textarea>
+      <div class="btn-row">
+        <button class="btn" onclick="doTranslate()">Dịch</button>
+        <button class="btn secondary" onclick="speakText(document.getElementById('translateInput').value)">Đọc</button>
+      </div>
+      <div id="translateResult"></div>
+    </div>
+  </div>
+</div>
+
+<div id="page-settings" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Cài đặt</h1></div>
+  <div class="container">
+    <div class="setting-box">
+      <label class="setting-label">🔑 Gemini API Key</label>
+      <div class="setting-hint">Lấy miễn phí tại <b>aistudio.google.com</b> → Get API Key. Key được lưu trên máy bạn.</div>
+      <input type="password" id="geminiKeyInput" placeholder="AIza...">
+      <div class="btn-row">
+        <button class="btn" onclick="saveKey()">💾 Lưu key</button>
+        <button class="btn danger" onclick="clearKey()">🗑️ Xóa key</button>
+      </div>
+      <div id="keyStatus" style="margin-top:12px;font-size:14px"></div>
+    </div>
+  </div>
+</div>
+
+<script src="data/roadmap.js"></script>
+<script src="data/vocab.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
