@@ -153,19 +153,19 @@ function swapDirection() {
 function doTranslate() {
   const text = document.getElementById('translateInput').value.trim();
   if (!text) return;
-  if (!GEMINI_KEY || GEMINI_KEY.includes('KEY-THAT-CUA-BAN')) {
-    alert('Chưa cấu hình GEMINI_KEY trong app.js. Mở file app.js sửa dòng 2.');
-    return;
-  }
   const isEnVi = currentDir === 'en-vi';
   const prompt = isEnVi
     ? 'Dịch sang tiếng Việt và giải thích ngắn gọn ngữ pháp: "' + text + '"'
     : 'Dịch sang tiếng Anh và giải thích ngắn gọn ngữ pháp: "' + text + '"';
 
   document.getElementById('translateResult').innerHTML = '<div class="result">Đang dịch...</div>';
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + GEMINI_KEY, {
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + GEMINI_KEY,
+      'x-goog-api-key': GEMINI_KEY
+    },
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
   })
   .then(r => r.json())
