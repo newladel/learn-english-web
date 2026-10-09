@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#3f51b5">
 <title>Learn English</title>
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 
@@ -25,6 +25,11 @@
     <button class="btn-big orange" onclick="showPage('vocab')">
       <div class="icon">🃏</div>
       <div class="text"><div class="title">Từ vựng (Flashcard)</div><div class="sub">Học & ôn theo spaced repetition</div></div>
+      <div class="arrow">›</div>
+    </button>
+    <button class="btn-big green" onclick="showPage('write')">
+      <div class="icon">✍️</div>
+      <div class="text"><div class="title">AI sửa lỗi viết</div><div class="sub">Chấm điểm + chỉ lỗi cụ thể</div></div>
       <div class="arrow">›</div>
     </button>
     <button class="btn-big teal" onclick="showPage('translate')">
@@ -68,6 +73,21 @@
   <div class="container" id="vocabBody"></div>
 </div>
 
+<div id="page-write" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>AI sửa lỗi viết</h1></div>
+  <div class="container">
+    <div class="setting-box">
+      <div class="setting-hint" style="margin-bottom:12px">✍️ Viết 1 đoạn tiếng Anh bất kỳ (3-5 câu). AI sẽ chấm điểm, chỉ lỗi và gợi ý sửa.</div>
+      <textarea id="writeInput" placeholder="Ví dụ: I go to school yesterday. It was very funn..."></textarea>
+      <div class="btn-row">
+        <button class="btn" onclick="checkWriting()">🎯 Chấm điểm</button>
+        <button class="btn secondary" onclick="resetWrite()">Xóa</button>
+      </div>
+      <div id="writeResult"></div>
+    </div>
+  </div>
+</div>
+
 <div id="page-translate" class="page">
   <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1 id="translateTitle">Dịch Anh → Việt</h1></div>
   <div class="container">
@@ -90,7 +110,7 @@
   <div class="container">
     <div class="setting-box">
       <label class="setting-label">🔑 Gemini API Key</label>
-      <div class="setting-hint">Lấy miễn phí tại <b>aistudio.google.com</b> → Get API Key. Key được lưu trên máy bạn.</div>
+      <div class="setting-hint">Lấy miễn phí tại <b>aistudio.google.com/apikey</b> → Create API key. Key phải bắt đầu bằng <b>AIza...</b></div>
       <input type="password" id="geminiKeyInput" placeholder="AIza...">
       <div class="btn-row">
         <button class="btn" onclick="saveKey()">💾 Lưu key</button>
@@ -101,8 +121,8 @@
   </div>
 </div>
 
-<script src="data/roadmap.js?v=7"></script>
-<script src="data/vocab.js?v=7"></script>
-<script src="app.js?v=7"></script>
+<script src="data/roadmap.js?v=8"></script>
+<script src="data/vocab.js?v=8"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
