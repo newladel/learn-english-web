@@ -126,7 +126,7 @@ function speakText(text, lang) {
   speechSynthesis.speak(u);
 }
 
-/* ========== HÀM GỌI GEMINI CHUNG (Bearer auth) ========== */
+/* ========== HÀM GỌI GEMINI CHUNG ========== */
 async function callGemini(prompt) {
   const key = getGeminiKey();
   if (!key) {
@@ -160,25 +160,14 @@ async function checkWriting() {
   const res = document.getElementById('writeResult');
   res.innerHTML = '<div class="result">🤖 Đang chấm bài...</div>';
 
-  const prompt = `Bạn là giáo viên tiếng Anh. Học sinh viết đoạn văn sau:
-
-"${text}"
-
-Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc, KHÔNG dùng markdown, KHÔNG dùng dấu ```):
-
-📊 ĐIỂM: [X/10]
-
-✍️ BÀI SỬA:
-[đoạn văn đã sửa hoàn chỉnh bằng tiếng Anh]
-
-❌ LỖI CHÍNH:
-- [lỗi 1: từ sai → từ đúng + giải thích ngắn]
-- [lỗi 2: ...]
-
-💡 GỢI Ý:
-[1-2 câu nhận xét bằng tiếng Việt về điểm mạnh, điểm cần cải thiện]
-
-Chỉ trả về nội dung trên, không thêm gì khác.`;
+  const prompt = 'Bạn là giáo viên tiếng Anh. Học sinh viết đoạn văn sau:\n\n' +
+    text + '\n\n' +
+    'Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc):\n\n' +
+    '📊 ĐIỂM: [X/10]\n\n' +
+    '✍️ BÀI SỬA:\n[đoạn văn đã sửa hoàn chỉnh bằng tiếng Anh]\n\n' +
+    '❌ LỖI CHÍNH:\n- [lỗi 1: từ sai -> từ đúng + giải thích ngắn]\n- [lỗi 2: ...]\n\n' +
+    '💡 GỢI Ý:\n[1-2 câu nhận xét bằng tiếng Việt về điểm mạnh, điểm cần cải thiện]\n\n' +
+    'Chỉ trả về nội dung trên, không thêm gì khác.';
 
   const r = await callGemini(prompt);
   if (!r) return;
