@@ -1,5 +1,5 @@
 /* ========== CẤU HÌNH ========== */
-const GEMINI_MODEL = 'gemini-2.0-flash';
+const GEMINI_MODEL = 'gemini-3.5-flash-lite';
 const SKILL_ICONS = { nghe:'🎧', noi:'🎤', doc:'📖', viet:'✏️', dich:'🌐' };
 
 /* ========== LOCALSTORAGE ========== */
@@ -126,7 +126,7 @@ function speakText(text, lang) {
   speechSynthesis.speak(u);
 }
 
-/* ========== HÀM GỌI GEMINI CHUNG ========== */
+/* ========== HÀM GỌI GEMINI CHUNG (Bearer auth) ========== */
 async function callGemini(prompt) {
   const key = getGeminiKey();
   if (!key) {
@@ -135,9 +135,12 @@ async function callGemini(prompt) {
     return null;
   }
   try {
-    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + key, {
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + key
+      },
       body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
     });
     const d = await r.json();
@@ -161,7 +164,7 @@ async function checkWriting() {
 
 "${text}"
 
-Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc, KHÔNG dùng markdown, KHÔNG ```):
+Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc, KHÔNG dùng markdown, KHÔNG dùng dấu ```):
 
 📊 ĐIỂM: [X/10]
 
@@ -171,7 +174,6 @@ Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc, 
 ❌ LỖI CHÍNH:
 - [lỗi 1: từ sai → từ đúng + giải thích ngắn]
 - [lỗi 2: ...]
-- ...
 
 💡 GỢI Ý:
 [1-2 câu nhận xét bằng tiếng Việt về điểm mạnh, điểm cần cải thiện]
@@ -247,9 +249,6 @@ function loadSettings() {
 function saveKey() {
   const k = document.getElementById('geminiKeyInput').value.trim();
   if (!k) { alert('Vui lòng nhập key'); return; }
-  if (!k.startsWith('AIza')) {
-    if (!confirm('Key Gemini thường bắt đầu bằng "AIza...". Key bạn nhập không đúng định dạng. Vẫn lưu?')) return;
-  }
   localStorage.setItem('gemini_key', k);
   alert('Đã lưu key!');
   loadSettings();
