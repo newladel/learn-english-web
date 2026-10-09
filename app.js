@@ -1,5 +1,5 @@
 /* ========== CẤU HÌNH ========== */
-const GEMINI_MODEL = 'gemini-3.8-flash';
+const GEMINI_MODEL = 'gemini-3.5-flash-lite';';
 const SKILL_ICONS = { nghe:'🎧', noi:'🎤', doc:'📖', viet:'✏️', dich:'🌐' };
 
 /* ========== LOCALSTORAGE ========== */
