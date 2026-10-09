@@ -1,3 +1,5 @@
+/* ========== CẤU HÌNH ========== */
+const GEMINI_MODEL = 'gemini-3.8-flash';
 const SKILL_ICONS = { nghe:'🎧', noi:'🎤', doc:'📖', viet:'✏️', dich:'🌐' };
 
 /* ========== LOCALSTORAGE ========== */
@@ -165,7 +167,7 @@ function doTranslate() {
     : `Dịch sang tiếng Anh và giải thích ngắn gọn ngữ pháp: "${text}"`;
 
   document.getElementById('translateResult').innerHTML = '<div class="result">Đang dịch...</div>';
-  fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
+  fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${key}`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -173,7 +175,12 @@ function doTranslate() {
   .then(r => r.json())
   .then(d => {
     if (d.error) {
-      document.getElementById('translateResult').innerHTML = `<div class="result" style="background:#ffebee;color:#c62828"><b>Lỗi từ Google:</b><br>${d.error.message}<br><br><b>Code:</b> ${d.error.code}<br><b>Status:</b> ${d.error.status || ''}</div>`;
+      let hint = '';
+      if (d.error.message && d.error.message.includes('models/')) {
+        const match = d.error.message.match(/models\/([a-z0-9.-]+)/);
+        if (match) hint = `<br><br><b>💡 Gợi ý:</b> Đổi <code>GEMINI_MODEL</code> trong app.js thành <code>${match[1]}</code>`;
+      }
+      document.getElementById('translateResult').innerHTML = `<div class="result" style="background:#ffebee;color:#c62828"><b>Lỗi từ Google:</b><br>${d.error.message}${hint}<br><br><b>Code:</b> ${d.error.code}</div>`;
       return;
     }
     const t = d.candidates?.[0]?.content?.parts?.[0]?.text;
