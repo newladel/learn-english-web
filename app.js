@@ -23,9 +23,12 @@ function getLearnedCount() { return Object.keys(getVocabProgress()).length; }
 
 /* ========== ĐIỀU HƯỚNG ========== */
 function updateStats() {
-  document.getElementById('streakVal').textContent = getStreak() + ' ngày';
-  document.getElementById('doneVal').textContent = getDone().length + ' bài';
-  document.getElementById('vocabVal').textContent = getLearnedCount() + ' từ';
+  const s = document.getElementById('streakVal');
+  const d = document.getElementById('doneVal');
+  const v = document.getElementById('vocabVal');
+  if (s) s.textContent = getStreak() + ' ngày';
+  if (d) d.textContent = getDone().length + ' bài';
+  if (v) v.textContent = getLearnedCount() + ' từ';
 }
 
 function showPage(name) {
@@ -36,6 +39,7 @@ function showPage(name) {
   if (name === 'roadmap') renderRoadmap();
   if (name === 'vocab') renderVocab();
   if (name === 'settings') loadSettings();
+  if (name === 'translate') updateTranslateUI();
 }
 
 /* ========== LỘ TRÌNH ========== */
@@ -109,17 +113,42 @@ function markDone(id) {
 }
 
 /* ========== ĐỌC TO ========== */
-function speakText(text) {
+function speakText(text, lang) {
   if (!('speechSynthesis' in window)) { alert('Trình duyệt không hỗ trợ đọc.'); return; }
   if (!text) { alert('Không có nội dung để đọc.'); return; }
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'en-US'; u.rate = 0.85;
+  u.lang = lang === 'vi' ? 'vi-VN' : 'en-US';
+  u.rate = 0.85;
   speechSynthesis.speak(u);
 }
 
-/* ========== DỊCH ========== */
+/* ========== DỊCH 2 CHIỀU ========== */
+let currentDir = localStorage.getItem('translate_dir') || 'en-vi';
+
 function getGeminiKey() { return localStorage.getItem('gemini_key') || ''; }
+
+function updateTranslateUI() {
+  const isEnVi = currentDir === 'en-vi';
+  const title = document.getElementById('translateTitle');
+  const input = document.getElementById('translateInput');
+  const swapLabel = document.getElementById('swapLabel');
+  const swapIcon = document.getElementById('swapIcon');
+  if (title) title.textContent = isEnVi ? 'Dịch Anh → Việt' : 'Dịch Việt → Anh';
+  if (input) input.placeholder = isEnVi ? 'Nhập câu tiếng Anh...' : 'Nhập câu tiếng Việt...';
+  if (swapLabel) swapLabel.textContent = isEnVi ? 'Anh → Việt' : 'Việt → Anh';
+  if (swapIcon) swapIcon.style.transform = isEnVi ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+function swapDirection() {
+  currentDir = currentDir === 'en-vi' ? 'vi-en' : 'en-vi';
+  localStorage.setItem('translate_dir', currentDir);
+  updateTranslateUI();
+  const inp = document.getElementById('translateInput');
+  const res = document.getElementById('translateResult');
+  if (inp) inp.value = '';
+  if (res) res.innerHTML = '';
+}
 
 function doTranslate() {
   const text = document.getElementById('translateInput').value.trim();
@@ -130,11 +159,16 @@ function doTranslate() {
     showPage('settings');
     return;
   }
+  const isEnVi = currentDir === 'en-vi';
+  const prompt = isEnVi
+    ? `Dịch sang tiếng Việt và giải thích ngắn gọn ngữ pháp: "${text}"`
+    : `Dịch sang tiếng Anh và giải thích ngắn gọn ngữ pháp: "${text}"`;
+
   document.getElementById('translateResult').innerHTML = '<div class="result">Đang dịch...</div>';
   fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ contents: [{ parts: [{ text: `Dịch sang tiếng Việt và giải thích ngắn gọn ngữ pháp: "${text}"` }] }] })
+    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
   })
   .then(r => r.json())
   .then(d => {
@@ -277,7 +311,7 @@ function renderCard() {
         <div class="flash-ex">📝 ${w.ex}</div>
       ` : `<div style="color:#999;margin-top:20px">Nhấn "Xem đáp án" để xem nghĩa</div>`}
     </div>
-    <button class="flash-btn" onclick="speakText('${w.en.replace(/'/g,"\\'")}')">🔊 Đọc to</button>
+    <button class="flash-btn" onclick="speakText('${w.en.replace(/'/g,"\\'")}', 'en')">🔊 Đọc to</button>
   `;
   if (!s.showAnswer) {
     html += `<button class="flash-btn" style="background:#2e7d32" onclick="session.showAnswer=true;renderCard()">👁️ Xem đáp án</button>`;
@@ -325,3 +359,4 @@ function rateCard(rating) {
 
 /* ========== KHỞI ĐỘNG ========== */
 updateStats();
+updateTranslateUI();
