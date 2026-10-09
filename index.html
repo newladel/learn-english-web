@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#3f51b5">
 <title>Learn English</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
@@ -29,7 +29,7 @@
     </button>
     <button class="btn-big teal" onclick="showPage('translate')">
       <div class="icon">🌐</div>
-      <div class="text"><div class="title">Dịch Anh - Việt</div><div class="sub">Gemini AI dịch + giải thích</div></div>
+      <div class="text"><div class="title">Dịch 2 chiều</div><div class="sub">Anh ⇄ Việt với Gemini AI</div></div>
       <div class="arrow">›</div>
     </button>
     <button class="btn-big purple" onclick="showPage('settings')">
@@ -69,13 +69,16 @@
 </div>
 
 <div id="page-translate" class="page">
-  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Dịch Anh - Việt</h1></div>
+  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1 id="translateTitle">Dịch Anh → Việt</h1></div>
   <div class="container">
     <div class="translate-box">
+      <button class="swap-btn" onclick="swapDirection()">
+        <span id="swapIcon">⇅</span> Đổi chiều: <span id="swapLabel">Anh → Việt</span>
+      </button>
       <textarea id="translateInput" placeholder="Nhập câu tiếng Anh..."></textarea>
       <div class="btn-row">
         <button class="btn" onclick="doTranslate()">Dịch</button>
-        <button class="btn secondary" onclick="speakText(document.getElementById('translateInput').value)">Đọc</button>
+        <button class="btn secondary" onclick="speakText(document.getElementById('translateInput').value, currentDir === 'en-vi' ? 'en' : 'vi')">Đọc</button>
       </div>
       <div id="translateResult"></div>
     </div>
@@ -98,8 +101,8 @@
   </div>
 </div>
 
-<script src="data/roadmap.js"></script>
-<script src="data/vocab.js"></script>
-<script src="app.js"></script>
+<script src="data/roadmap.js?v=3"></script>
+<script src="data/vocab.js?v=3"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
