@@ -92,3 +92,4 @@ textarea:focus, input:focus { outline: none; border-color: #00897b; }
 .swap-btn { width: 100%; padding: 12px; margin-bottom: 12px; background: #e8eaf6; color: #3f51b5; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .swap-btn:active { background: #c5cae9; transform: scale(0.98); }
 #swapIcon { font-size: 18px; display: inline-block; transition: transform 0.3s; }
+.btn-big.green { background: #43a047; }
