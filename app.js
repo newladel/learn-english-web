@@ -1,5 +1,5 @@
 /* ========== CẤU HÌNH ========== */
-const GEMINI_MODEL = 'gemini-3.5-flash-lite';
+const GEMINI_MODEL = 'gemini-2.0-flash';
 const SKILL_ICONS = { nghe:'🎧', noi:'🎤', doc:'📖', viet:'✏️', dich:'🌐' };
 
 /* ========== LOCALSTORAGE ========== */
@@ -126,6 +126,72 @@ function speakText(text, lang) {
   speechSynthesis.speak(u);
 }
 
+/* ========== HÀM GỌI GEMINI CHUNG ========== */
+async function callGemini(prompt) {
+  const key = getGeminiKey();
+  if (!key) {
+    alert('Chưa có Gemini API key. Vào Cài đặt để nhập.');
+    showPage('settings');
+    return null;
+  }
+  try {
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + key, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    const d = await r.json();
+    if (d.error) return { error: d.error.message, code: d.error.code };
+    const t = d.candidates?.[0]?.content?.parts?.[0]?.text;
+    return { text: t || 'Không có kết quả' };
+  } catch (e) {
+    return { error: e.message, code: 'network' };
+  }
+}
+
+/* ========== AI SỬA LỖI VIẾT ========== */
+async function checkWriting() {
+  const text = document.getElementById('writeInput').value.trim();
+  if (!text) { alert('Vui lòng viết gì đó trước!'); return; }
+  if (text.length < 5) { alert('Viết ít nhất 5 ký tự!'); return; }
+  const res = document.getElementById('writeResult');
+  res.innerHTML = '<div class="result">🤖 Đang chấm bài...</div>';
+
+  const prompt = `Bạn là giáo viên tiếng Anh. Học sinh viết đoạn văn sau:
+
+"${text}"
+
+Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc, KHÔNG dùng markdown, KHÔNG ```):
+
+📊 ĐIỂM: [X/10]
+
+✍️ BÀI SỬA:
+[đoạn văn đã sửa hoàn chỉnh bằng tiếng Anh]
+
+❌ LỖI CHÍNH:
+- [lỗi 1: từ sai → từ đúng + giải thích ngắn]
+- [lỗi 2: ...]
+- ...
+
+💡 GỢI Ý:
+[1-2 câu nhận xét bằng tiếng Việt về điểm mạnh, điểm cần cải thiện]
+
+Chỉ trả về nội dung trên, không thêm gì khác.`;
+
+  const r = await callGemini(prompt);
+  if (!r) return;
+  if (r.error) {
+    res.innerHTML = '<div class="result" style="background:#ffebee;color:#c62828"><b>Lỗi:</b><br>' + r.error + '<br><br><b>Code:</b> ' + r.code + '</div>';
+    return;
+  }
+  res.innerHTML = '<div class="result" style="white-space:pre-wrap;line-height:1.7">' + r.text + '</div>';
+}
+
+function resetWrite() {
+  document.getElementById('writeInput').value = '';
+  document.getElementById('writeResult').innerHTML = '';
+}
+
 /* ========== DỊCH 2 CHIỀU ========== */
 let currentDir = localStorage.getItem('translate_dir') || 'en-vi';
 
@@ -151,40 +217,22 @@ function swapDirection() {
   if (res) res.innerHTML = '';
 }
 
-function doTranslate() {
+async function doTranslate() {
   const text = document.getElementById('translateInput').value.trim();
   if (!text) return;
-  const key = getGeminiKey();
-  if (!key) {
-    alert('Chưa có Gemini API key. Vào Cài đặt để nhập.');
-    showPage('settings');
-    return;
-  }
   const isEnVi = currentDir === 'en-vi';
   const prompt = isEnVi
     ? 'Dịch sang tiếng Việt và giải thích ngắn gọn ngữ pháp: "' + text + '"'
     : 'Dịch sang tiếng Anh và giải thích ngắn gọn ngữ pháp: "' + text + '"';
 
   document.getElementById('translateResult').innerHTML = '<div class="result">Đang dịch...</div>';
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + key, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-  })
-  .then(r => r.json())
-  .then(d => {
-    if (d.error) {
-      document.getElementById('translateResult').innerHTML = '<div class="result" style="background:#ffebee;color:#c62828"><b>Lỗi:</b><br>' + d.error.message + '<br><br><b>Code:</b> ' + d.error.code + '</div>';
-      return;
-    }
-    const t = d.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!t) {
-      document.getElementById('translateResult').innerHTML = '<div class="result" style="background:#fff3e0">Không có kết quả</div>';
-      return;
-    }
-    document.getElementById('translateResult').innerHTML = '<div class="result">' + t.replace(/\n/g,'<br>') + '</div>';
-  })
-  .catch(e => { document.getElementById('translateResult').innerHTML = '<div class="result" style="background:#ffebee">Lỗi mạng: ' + e.message + '</div>'; });
+  const r = await callGemini(prompt);
+  if (!r) return;
+  if (r.error) {
+    document.getElementById('translateResult').innerHTML = '<div class="result" style="background:#ffebee;color:#c62828"><b>Lỗi:</b><br>' + r.error + '<br><br><b>Code:</b> ' + r.code + '</div>';
+    return;
+  }
+  document.getElementById('translateResult').innerHTML = '<div class="result">' + r.text.replace(/\n/g,'<br>') + '</div>';
 }
 
 /* ========== CÀI ĐẶT ========== */
@@ -193,14 +241,14 @@ function loadSettings() {
   const inp = document.getElementById('geminiKeyInput');
   const status = document.getElementById('keyStatus');
   if (inp) inp.value = k;
-  if (status) status.innerHTML = k ? '<span style="color:#2e7d32">✅ Đã có key</span>' : '<span style="color:#c62828">❌ Chưa có key</span>';
+  if (status) status.innerHTML = k ? '<span style="color:#2e7d32">✅ Đã có key (' + k.substring(0,8) + '...)</span>' : '<span style="color:#c62828">❌ Chưa có key</span>';
 }
 
 function saveKey() {
   const k = document.getElementById('geminiKeyInput').value.trim();
   if (!k) { alert('Vui lòng nhập key'); return; }
   if (!k.startsWith('AIza')) {
-    if (!confirm('Key Gemini thường bắt đầu bằng "AIza". Key bạn nhập không đúng định dạng. Vẫn lưu?')) return;
+    if (!confirm('Key Gemini thường bắt đầu bằng "AIza...". Key bạn nhập không đúng định dạng. Vẫn lưu?')) return;
   }
   localStorage.setItem('gemini_key', k);
   alert('Đã lưu key!');
