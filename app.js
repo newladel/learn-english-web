@@ -159,16 +159,18 @@ async function checkWriting() {
   if (text.length < 5) { alert('Viết ít nhất 5 ký tự!'); return; }
   const res = document.getElementById('writeResult');
   res.innerHTML = '<div class="result">🤖 Đang chấm bài...</div>';
-
-  const prompt = 'Bạn là giáo viên tiếng Anh. Học sinh viết đoạn văn sau:\n\n' +
-    text + '\n\n' +
-    'Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc):\n\n' +
-    '📊 ĐIỂM: [X/10]\n\n' +
-    '✍️ BÀI SỬA:\n[đoạn văn đã sửa hoàn chỉnh bằng tiếng Anh]\n\n' +
-    '❌ LỖI CHÍNH:\n- [lỗi 1: từ sai -> từ đúng + giải thích ngắn]\n- [lỗi 2: ...]\n\n' +
-    '💡 GỢI Ý:\n[1-2 câu nhận xét bằng tiếng Việt về điểm mạnh, điểm cần cải thiện]\n\n' +
-    'Chỉ trả về nội dung trên, không thêm gì khác.';
-
+ 
+  const prompt = 'Bạn là giáo viên tiếng Anh thân thiện. Học sinh viết đoạn văn sau:\n\n' +
+  text + '\n\n' +
+  'Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc):\n\n' +
+  '📊 ĐIỂM: [X/10]\n\n' +
+  '✍️ BÀI SỬA:\n[đoạn văn đã sửa hoàn chỉnh bằng tiếng Anh]\n\n' +
+  '❌ LỖI CHÍNH:\n- [lỗi 1: từ sai -> từ đúng + giải thích ngắn]\n- [lỗi 2: ...]\n\n' +
+  '💡 GỢI Ý:\n[1-2 câu nhận xét bằng tiếng Việt về điểm mạnh, điểm cần cải thiện]\n\n' +
+  'LƯU Ý QUAN TRỌNG: Xưng hô với người học là "Bạn" (KHÔNG dùng "Em", "Con", "Cháu"). ' +
+  'Giọng văn thân thiện, khích lệ, không phán xét.\n\n' +
+  'Chỉ trả về nội dung trên, không thêm gì khác.';
+ 
   const r = await callGemini(prompt);
   if (!r) return;
   if (r.error) {
