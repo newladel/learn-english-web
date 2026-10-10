@@ -77,12 +77,17 @@
 <div id="page-vocab" class="page">
   <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Từ vựng</h1></div>
   <div class="container">
+    <button class="btn-big indigo" onclick="openNotebook()" style="margin-bottom:12px">
+      <div class="icon">📓</div>
+      <div class="text"><div class="title">Sổ tay của tôi</div><div class="sub" id="notebookInfo">Đang tải...</div></div>
+      <div class="arrow">›</div>
+    </button>
     <button class="btn-big purple" onclick="reviewAll()" style="margin-bottom:20px">
       <div class="icon">🔁</div>
       <div class="text"><div class="title">Ôn tập tất cả</div><div class="sub" id="reviewInfo">Đang tải...</div></div>
       <div class="arrow">›</div>
     </button>
-    <h3 style="margin-bottom:12px;font-size:16px">Chọn chủ đề</h3>
+    <h3 style="margin-bottom:12px;font-size:16px">Chủ đề có sẵn</h3>
     <div class="topic-grid" id="topicGrid"></div>
   </div>
 </div>
@@ -151,6 +156,7 @@
 <script src="lib/core.js"></script>
 <script src="lib/ai.js"></script>
 <script src="lib/speak.js"></script>
+<script src="lib/vocab-extract.js"></script>
 <script src="lib/lesson.js"></script>
 <script src="lib/vocab.js"></script>
 <script src="lib/settings.js"></script>
