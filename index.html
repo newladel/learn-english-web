@@ -30,6 +30,11 @@
       <div class="text"><div class="title">Từ vựng (Flashcard)</div><div class="sub">Học & ôn theo spaced repetition</div></div>
       <div class="arrow">›</div>
     </button>
+    <button class="btn-big pink" onclick="showPage('grammar')">
+      <div class="icon">📖</div>
+      <div class="text"><div class="title">Ngữ pháp</div><div class="sub">Công thức + ví dụ + bài tập</div></div>
+      <div class="arrow">›</div>
+    </button>
     <button class="btn-big green" onclick="showPage('write')">
       <div class="icon">✍️</div>
       <div class="text"><div class="title">AI sửa lỗi viết</div><div class="sub">Chấm điểm + chỉ lỗi cụ thể</div></div>
@@ -97,6 +102,16 @@
   <div class="container" id="vocabBody"></div>
 </div>
 
+<div id="page-grammar" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Ngữ pháp</h1></div>
+  <div class="container" id="grammarList"></div>
+</div>
+
+<div id="page-grammar-detail" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('grammar')">‹</button><h1 id="grammarTitle"></h1></div>
+  <div class="container" id="grammarBody"></div>
+</div>
+
 <div id="page-write" class="page">
   <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>AI sửa lỗi viết</h1></div>
   <div class="container">
@@ -153,12 +168,14 @@
 <script src="data/level_c1.js"></script>
 <script src="data/roadmap.js"></script>
 <script src="data/vocab.js"></script>
+<script src="data/grammar.js"></script>
 <script src="lib/core.js"></script>
 <script src="lib/ai.js"></script>
 <script src="lib/speak.js"></script>
 <script src="lib/vocab-extract.js"></script>
 <script src="lib/lesson.js"></script>
 <script src="lib/vocab.js"></script>
+<script src="lib/grammar.js"></script>
 <script src="lib/settings.js"></script>
 <script src="lib/init.js"></script>
 </body>
