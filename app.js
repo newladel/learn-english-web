@@ -51,7 +51,7 @@ function renderRoadmap() {
   document.getElementById('roadmapList').innerHTML = roadmap.map((lv, i) => `
     <div class="level ${i === 0 ? 'open' : ''}">
       <div class="level-header" onclick="this.parentElement.classList.toggle('open')">
-        <div><div class="level-title">${lv.code} — ${lv.name}</div><div class="level-desc">${lv.desc}</div></div>
+        <div><div class="level-title">${lv.code} —${lv.name}</div><div class="level-desc">${lv.desc}</div></div>
         <div>▼</div>
       </div>
       <div class="level-body">
@@ -126,7 +126,7 @@ function speakText(text, lang) {
   speechSynthesis.speak(u);
 }
 
-/* ========== HÀM GỌI GEMINI CHUNG ========== */
+/* ========== HÀM GỌI GEMINI CHUNG (ĐÃ SỬA LỖI 401) ========== */
 async function callGemini(prompt) {
   const key = getGeminiKey();
   if (!key) {
@@ -135,11 +135,11 @@ async function callGemini(prompt) {
     return null;
   }
   try {
-    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent', {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${key}`;
+    const r = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + key
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
     });
