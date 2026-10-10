@@ -51,7 +51,7 @@ function renderRoadmap() {
   document.getElementById('roadmapList').innerHTML = roadmap.map((lv, i) => `
     <div class="level ${i === 0 ? 'open' : ''}">
       <div class="level-header" onclick="this.parentElement.classList.toggle('open')">
-        <div><div class="level-title">${lv.code} —${lv.name}</div><div class="level-desc">${lv.desc}</div></div>
+        <div><div class="level-title">${lv.code} — ${lv.name}</div><div class="level-desc">${lv.desc}</div></div>
         <div>▼</div>
       </div>
       <div class="level-body">
@@ -64,6 +64,50 @@ function renderRoadmap() {
       </div>
     </div>
   `).join('');
+}
+
+/* ========== VISUAL ========== */
+function renderVisual(visual) {
+  if (!visual) return '';
+  const parts = visual.split(':');
+  const kind = parts[0];
+  const data = parts[1] || '';
+
+  if (kind === 'colors') {
+    const colorMap = {
+      red: '#e53935', blue: '#1e88e5', green: '#43a047',
+      yellow: '#fdd835', black: '#212121', white: '#ffffff',
+      orange: '#fb8c00', purple: '#8e24aa', pink: '#ec407a',
+      brown: '#6d4c41', gray: '#757575', grey: '#757575'
+    };
+    const items = data.split(',').map(c => {
+      const hex = colorMap[c.trim().toLowerCase()] || '#cccccc';
+      const border = c.trim().toLowerCase() === 'white' ? '#ccc' : hex;
+      return '<div class="color-swatch" style="background:' + hex + ';border-color:' + border + '" data-name="' + c.trim() + '"></div>';
+    }).join('');
+    return '<div class="visual-box"><div class="color-row">' + items + '</div></div>';
+  }
+
+  if (kind === 'numbers') {
+    const nums = data.split(',').map(n => n.trim()).filter(x => x);
+    const wordMap = { '1':'one','2':'two','3':'three','4':'four','5':'five','6':'six','7':'seven','8':'eight','9':'nine','10':'ten','11':'eleven','12':'twelve','20':'twenty','100':'hundred' };
+    const items = nums.map(n => {
+      const w = wordMap[n] || '';
+      return '<div class="number-tile"><div class="num">' + n + '</div>' + (w ? '<div class="word">' + w + '</div>' : '') + '</div>';
+    }).join('');
+    return '<div class="visual-box">' + items + '</div>';
+  }
+
+  if (kind === 'alphabet') {
+    const letters = data.split('').map(l => '<div class="letter-tile">' + l + '</div>').join('');
+    return '<div class="visual-box"><div class="alphabet-grid">' + letters + '</div></div>';
+  }
+
+  if (kind === 'emoji') {
+    return '<div class="visual-box"><div class="emoji-visual">' + data + '</div></div>';
+  }
+
+  return '';
 }
 
 function openLesson(id) {
@@ -79,6 +123,7 @@ function openLesson(id) {
         <div style="flex:1"><b>${s.title}</b></div>
         <div class="skill-type">${s.type.toUpperCase()}</div>
       </div>
+      ${renderVisual(s.visual)}
       <div class="content">${s.content.replace(/\n/g,'<br>')}</div>
       <button class="q-btn" style="width:100%;margin-bottom:12px;padding:12px" onclick="speakText(\`${s.content.replace(/`/g,'').replace(/"/g,'')}\`)">🔊 Đọc to</button>
       <div style="font-weight:700;margin-bottom:8px">Câu hỏi luyện tập:</div>
@@ -126,7 +171,7 @@ function speakText(text, lang) {
   speechSynthesis.speak(u);
 }
 
-/* ========== HÀM GỌI GEMINI CHUNG (ĐÃ SỬA LỖI 401) ========== */
+/* ========== GỌI GEMINI ========== */
 async function callGemini(prompt) {
   const key = getGeminiKey();
   if (!key) {
@@ -135,12 +180,10 @@ async function callGemini(prompt) {
     return null;
   }
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${key}`;
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + key;
     const r = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
     });
     const d = await r.json();
@@ -159,18 +202,17 @@ async function checkWriting() {
   if (text.length < 5) { alert('Viết ít nhất 5 ký tự!'); return; }
   const res = document.getElementById('writeResult');
   res.innerHTML = '<div class="result">🤖 Đang chấm bài...</div>';
- 
+
   const prompt = 'Bạn là giáo viên tiếng Anh thân thiện. Học sinh viết đoạn văn sau:\n\n' +
-  text + '\n\n' +
-  'Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc):\n\n' +
-  '📊 ĐIỂM: [X/10]\n\n' +
-  '✍️ BÀI SỬA:\n[đoạn văn đã sửa hoàn chỉnh bằng tiếng Anh]\n\n' +
-  '❌ LỖI CHÍNH:\n- [lỗi 1: từ sai -> từ đúng + giải thích ngắn]\n- [lỗi 2: ...]\n\n' +
-  '💡 GỢI Ý:\n[1-2 câu nhận xét bằng tiếng Việt về điểm mạnh, điểm cần cải thiện]\n\n' +
-  'LƯU Ý QUAN TRỌNG: Xưng hô với người học là "Bạn" (KHÔNG dùng "Em", "Con", "Cháu"). ' +
-  'Giọng văn thân thiện, khích lệ, không phán xét.\n\n' +
-  'Chỉ trả về nội dung trên, không thêm gì khác.';
- 
+    text + '\n\n' +
+    'Hãy chấm điểm và sửa lỗi theo format SAU (giữ nguyên cấu trúc):\n\n' +
+    '📊 ĐIỂM: [X/10]\n\n' +
+    '✍️ BÀI SỬA:\n[đoạn văn đã sửa hoàn chỉnh bằng tiếng Anh]\n\n' +
+    '❌ LỖI CHÍNH:\n- [lỗi 1: từ sai -> từ đúng + giải thích ngắn]\n- [lỗi 2: ...]\n\n' +
+    '💡 GỢI Ý:\n[1-2 câu nhận xét bằng tiếng Việt về điểm mạnh, điểm cần cải thiện]\n\n' +
+    'LƯU Ý: Xưng hô với người học là "Bạn" (KHÔNG dùng "Em"). Giọng thân thiện, khích lệ.\n\n' +
+    'Chỉ trả về nội dung trên, không thêm gì khác.';
+
   const r = await callGemini(prompt);
   if (!r) return;
   if (r.error) {
