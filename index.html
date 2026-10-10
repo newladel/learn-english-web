@@ -58,6 +58,22 @@
   <div class="container" id="lessonBody"></div>
 </div>
 
+<div id="page-speak" class="page">
+  <div class="header"><button class="back-btn" onclick="backFromSpeak()">‹</button><h1>🎤 Luyện phát âm</h1></div>
+  <div class="container">
+    <div class="setting-box">
+      <div class="setting-hint" style="margin-bottom:12px;font-size:15px">Đọc to câu sau:</div>
+      <div id="speakTarget" class="content" style="font-size:20px;text-align:center;font-weight:600;padding:20px 16px"></div>
+      <div class="btn-row">
+        <button class="btn" style="background:#3f51b5" onclick="playTarget()">🔊 Nghe mẫu</button>
+        <button class="btn" id="micBtn" style="background:#43a047" onclick="startListening()">🎤 Bấm để đọc</button>
+      </div>
+      <div id="speakStatus" style="margin-top:12px;text-align:center;color:#666;font-size:14px"></div>
+      <div id="speakResult"></div>
+    </div>
+  </div>
+</div>
+
 <div id="page-vocab" class="page">
   <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Từ vựng</h1></div>
   <div class="container">
