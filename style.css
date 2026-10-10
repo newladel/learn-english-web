@@ -17,6 +17,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .btn-big.teal { background: #00897b; }
 .btn-big.orange { background: #f57c00; }
 .btn-big.purple { background: #7b1fa2; }
+.btn-big.green { background: #43a047; }
 .btn-big .icon { font-size: 32px; margin-right: 16px; }
 .btn-big .text { flex: 1; }
 .btn-big .title { font-size: 17px; font-weight: 700; }
@@ -92,4 +93,15 @@ textarea:focus, input:focus { outline: none; border-color: #00897b; }
 .swap-btn { width: 100%; padding: 12px; margin-bottom: 12px; background: #e8eaf6; color: #3f51b5; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .swap-btn:active { background: #c5cae9; transform: scale(0.98); }
 #swapIcon { font-size: 18px; display: inline-block; transition: transform 0.3s; }
-.btn-big.green { background: #43a047; }
+
+/* ========== VISUAL ========== */
+.visual-box { margin-bottom: 12px; padding: 12px; background: #f9f9f9; border-radius: 10px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; }
+.color-swatch { width: 50px; height: 50px; border-radius: 10px; border: 2px solid #ddd; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,.1); }
+.color-swatch::after { content: attr(data-name); position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: #666; white-space: nowrap; }
+.color-row { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px 10px 30px 10px; justify-content: center; }
+.number-tile { width: 60px; height: 60px; border-radius: 12px; background: #3f51b5; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 700; box-shadow: 0 2px 6px rgba(63,81,181,.3); }
+.number-tile .num { font-size: 24px; line-height: 1; }
+.number-tile .word { font-size: 9px; margin-top: 2px; opacity: .9; }
+.alphabet-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 8px; width: 100%; }
+.letter-tile { background: linear-gradient(135deg,#3f51b5,#5e35b1); color: white; border-radius: 8px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,.15); }
+.emoji-visual { font-size: 50px; text-align: center; padding: 10px; }
