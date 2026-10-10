@@ -113,6 +113,7 @@ function renderVisual(visual) {
 function openLesson(id) {
   let lesson;
   for (const lv of roadmap) { const f = lv.lessons.find(l => l.id === id); if (f) { lesson = f; break; } }
+  window._currentLessonId = id;
   document.getElementById('lessonTitle').textContent = lesson.title;
   const done = getDone();
   const isDone = done.includes(id);
@@ -125,7 +126,8 @@ function openLesson(id) {
       </div>
       ${renderVisual(s.visual)}
       <div class="content">${s.content.replace(/\n/g,'<br>')}</div>
-      <button class="q-btn" style="width:100%;margin-bottom:12px;padding:12px" onclick="speakText(\`${s.content.replace(/`/g,'').replace(/"/g,'')}\`)">🔊 Đọc to</button>
+      <button class="q-btn" style="width:100%;margin-bottom:8px;padding:12px;background:#3f51b5" onclick="speakText(\`${s.content.replace(/`/g,'').replace(/"/g,'')}\`)">🔊 Đọc to</button>
+      <button class="q-btn" style="width:100%;margin-bottom:12px;padding:12px;background:#43a047" onclick="openSpeak(\`${s.content.replace(/`/g,'').replace(/"/g,'')}\`)">🎤 Luyện đọc câu này</button>
       <div style="font-weight:700;margin-bottom:8px">Câu hỏi luyện tập:</div>
       ${s.qs.map((q, qi) => `
         <div style="margin-bottom:16px">
@@ -169,6 +171,160 @@ function speakText(text, lang) {
   u.lang = lang === 'vi' ? 'vi-VN' : 'en-US';
   u.rate = 0.85;
   speechSynthesis.speak(u);
+}
+
+/* ========== LUYỆN PHÁT ÂM (Web Speech API) ========== */
+let speakTarget = '';
+let recognition = null;
+let isListening = false;
+
+function openSpeak(text) {
+  speakTarget = text.replace(/\n/g, ' ').trim();
+  document.getElementById('speakTarget').textContent = speakTarget;
+  document.getElementById('speakStatus').textContent = '';
+  document.getElementById('speakResult').innerHTML = '';
+  document.getElementById('micBtn').textContent = '🎤 Bấm để đọc';
+  document.getElementById('micBtn').style.background = '#43a047';
+  isListening = false;
+  showPage('speak');
+}
+
+function backFromSpeak() {
+  stopListening();
+  showPage('lesson');
+}
+
+function playTarget() {
+  speakText(speakTarget, 'en');
+}
+
+function getRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.lang = 'en-US';
+  r.continuous = false;
+  r.interimResults = false;
+  r.maxAlternatives = 1;
+  return r;
+}
+
+function startListening() {
+  const btn = document.getElementById('micBtn');
+  const status = document.getElementById('speakStatus');
+
+  if (isListening) {
+    stopListening();
+    return;
+  }
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    status.innerHTML = '<span style="color:#c62828">❌ Trình duyệt không hỗ trợ nhận diện giọng nói. Hãy dùng Chrome hoặc Samsung Internet.</span>';
+    return;
+  }
+
+  recognition = getRecognition();
+  if (!recognition) { status.textContent = 'Không khởi tạo được micro.'; return; }
+
+  recognition.onstart = function() {
+    isListening = true;
+    btn.textContent = '⏹️ Dừng (đang nghe...)';
+    btn.style.background = '#c62828';
+    status.textContent = '🎤 Đang nghe... Hãy đọc to câu trên.';
+  };
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    showSpeakResult(transcript);
+  };
+
+  recognition.onerror = function(event) {
+    status.innerHTML = '<span style="color:#c62828">Lỗi: ' + event.error + '</span>';
+    isListening = false;
+    btn.textContent = '🎤 Bấm để đọc';
+    btn.style.background = '#43a047';
+  };
+
+  recognition.onend = function() {
+    isListening = false;
+    btn.textContent = '🎤 Bấm để đọc';
+    btn.style.background = '#43a047';
+    if (status.textContent.indexOf('Đang nghe') === 0) {
+      status.textContent = 'Đã dừng. Bấm micro để đọc lại.';
+    }
+  };
+
+  try {
+    recognition.start();
+  } catch (e) {
+    status.textContent = 'Lỗi khởi động micro: ' + e.message;
+  }
+}
+
+function stopListening() {
+  if (recognition && isListening) {
+    try { recognition.stop(); } catch (e) {}
+  }
+  isListening = false;
+  const btn = document.getElementById('micBtn');
+  if (btn) { btn.textContent = '🎤 Bấm để đọc'; btn.style.background = '#43a047'; }
+}
+
+function normalizeText(t) {
+  return t.toLowerCase()
+    .replace(/[.,!?;:'"]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function showSpeakResult(transcript) {
+  const status = document.getElementById('speakStatus');
+  const result = document.getElementById('speakResult');
+  status.textContent = '✅ Đã nhận diện xong.';
+
+  const targetNorm = normalizeText(speakTarget);
+  const spokenNorm = normalizeText(transcript);
+
+  const targetWords = targetNorm.split(' ').filter(w => w);
+  const spokenWords = spokenNorm.split(' ').filter(w => w);
+
+  let correctCount = 0;
+  const targetHtml = targetWords.map(w => {
+    if (spokenWords.indexOf(w) !== -1) {
+      correctCount++;
+      return '<span style="background:#c8e6c9;color:#2e7d32;padding:2px 6px;border-radius:6px;margin:2px;display:inline-block;font-weight:700">' + w + '</span>';
+    }
+    return '<span style="background:#ffcdd2;color:#c62828;padding:2px 6px;border-radius:6px;margin:2px;display:inline-block;font-weight:700">' + w + '</span>';
+  }).join('');
+
+  let score = 0;
+  if (targetWords.length > 0) {
+    score = Math.round((correctCount / targetWords.length) * 100);
+  }
+
+  let scoreColor = '#c62828';
+  let scoreEmoji = '❌';
+  let feedback = 'Cố gắng đọc chậm và rõ từng từ nhé!';
+  if (score >= 90) { scoreColor = '#2e7d32'; scoreEmoji = '🏆'; feedback = 'Xuất sắc! Phát âm rất chuẩn.'; }
+  else if (score >= 70) { scoreColor = '#43a047'; scoreEmoji = '✅'; feedback = 'Tốt lắm! Cố gắng thêm chút nữa.'; }
+  else if (score >= 50) { scoreColor = '#ef6c00'; scoreEmoji = '⚠️'; feedback = 'Khá ổn. Chú ý các từ bị đỏ.'; }
+
+  result.innerHTML = `
+    <div style="margin-top:16px;padding:16px;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)">
+      <div style="text-align:center;font-size:42px;font-weight:800;color:${scoreColor};margin-bottom:8px">${scoreEmoji} ${score}%</div>
+      <div style="text-align:center;color:#666;margin-bottom:16px;font-size:14px">${feedback}</div>
+      <div style="font-weight:700;margin-bottom:8px;font-size:14px">Bạn đã đọc:</div>
+      <div style="background:#f5f5f5;padding:12px;border-radius:8px;margin-bottom:12px;font-size:15px">${transcript}</div>
+      <div style="font-weight:700;margin-bottom:8px;font-size:14px">Từng từ:</div>
+      <div style="background:#f9f9f9;padding:12px;border-radius:8px;line-height:1.8">${targetHtml}</div>
+      <div style="margin-top:12px;font-size:13px;color:#666">Đúng: <b>${correctCount}/${targetWords.length}</b> từ</div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn" style="background:#43a047" onclick="startListening()">🎤 Đọc lại</button>
+        <button class="btn secondary" onclick="playTarget()">🔊 Nghe mẫu</button>
+      </div>
+    </div>
+  `;
 }
 
 /* ========== GỌI GEMINI ========== */
