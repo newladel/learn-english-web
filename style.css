@@ -211,3 +211,53 @@ textarea:focus, input:focus { outline: none; border-color: #00897b; }
   flex-shrink: 0;
 }
 .chat-send-btn:active { opacity: 0.85; }
+/* ========== ROADMAP ACCORDION ========== */
+.level { padding: 0; overflow: hidden; }
+.level-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  gap: 12px;
+  transition: background 0.2s;
+}
+.level-code {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 17px;
+  flex-shrink: 0;
+  color: white;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.1);
+}
+.level-text { flex: 1; color: white; }
+.level-text .level-title { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+.level-text .level-desc { font-size: 12px; opacity: 0.9; }
+.level-arrow {
+  color: white;
+  font-size: 14px;
+  transition: transform 0.3s;
+  opacity: 0.85;
+}
+.level.open .level-arrow { transform: rotate(180deg); }
+
+/* Màu từng cấp */
+.level-a0 .level-header { background: linear-gradient(135deg, #3f51b5, #5c6bc0); }
+.level-a1 .level-header { background: linear-gradient(135deg, #43a047, #66bb6a); }
+.level-a2 .level-header { background: linear-gradient(135deg, #f57c00, #ffa726); }
+.level-b1 .level-header { background: linear-gradient(135deg, #d81b60, #ec407a); }
+.level-b2 .level-header { background: linear-gradient(135deg, #7b1fa2, #9c27b0); }
+.level-c1 .level-header { background: linear-gradient(135deg, #c62828, #e53935); }
+
+/* Body */
+.level-body {
+  display: none;
+  background: white;
+  border-top: 1px solid #eee;
+}
+.level.open .level-body { display: block; }
+.level.open .level-header { border-radius: 0; }
