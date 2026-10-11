@@ -46,8 +46,8 @@
       <div class="arrow">›</div>
     </button>
     <button class="btn-big purple" onclick="showPage('settings')">
-      <div class="icon">⚙️</div>
-      <div class="text"><div class="title">Cài đặt</div><div class="sub">Gemini API key</div></div>
+      <div class="icon">ℹ️</div>
+      <div class="text"><div class="title">Giới thiệu</div><div class="sub">Thông tin về ứng dụng</div></div>
       <div class="arrow">›</div>
     </button>
   </div>
@@ -145,19 +145,8 @@
 </div>
 
 <div id="page-settings" class="page">
-  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Cài đặt</h1></div>
-  <div class="container">
-    <div class="setting-box">
-      <label class="setting-label">🔑 Gemini API Key</label>
-      <div class="setting-hint">Lấy miễn phí tại <b>aistudio.google.com/apikey</b> → Create API key.</div>
-      <input type="password" id="geminiKeyInput" placeholder="AIza...">
-      <div class="btn-row">
-        <button class="btn" onclick="saveKey()">💾 Lưu key</button>
-        <button class="btn danger" onclick="clearKey()">🗑️ Xóa key</button>
-      </div>
-      <div id="keyStatus" style="margin-top:12px;font-size:14px"></div>
-    </div>
-  </div>
+  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Giới thiệu</h1></div>
+  <div class="container" id="aboutBody"></div>
 </div>
 
 <script src="data/level_a0.js"></script>
