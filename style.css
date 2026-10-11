@@ -252,6 +252,7 @@ textarea:focus, input:focus { outline: none; border-color: #00897b; }
 .level-b1 .level-header { background: linear-gradient(135deg, #388e3c, #43a047); }
 .level-b2 .level-header { background: linear-gradient(135deg, #2e7d32, #388e3c); }
 .level-c1 .level-header { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+
 .level-body {
   display: none;
   background: white;
