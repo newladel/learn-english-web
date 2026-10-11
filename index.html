@@ -35,6 +35,11 @@
       <div class="text"><div class="title">Ngữ pháp</div><div class="sub">Công thức + ví dụ + bài tập</div></div>
       <div class="arrow">›</div>
     </button>
+    <button class="btn-big blue" onclick="showPage('chat')">
+      <div class="icon">💬</div>
+      <div class="text"><div class="title">Giao tiếp với AI</div><div class="sub">Luyện nói theo tình huống thực tế</div></div>
+      <div class="arrow">›</div>
+    </button>
     <button class="btn-big green" onclick="showPage('write')">
       <div class="icon">✍️</div>
       <div class="text"><div class="title">AI sửa lỗi viết</div><div class="sub">Chấm điểm + chỉ lỗi cụ thể</div></div>
@@ -76,6 +81,24 @@
       <div id="speakStatus" style="margin-top:12px;text-align:center;color:#666;font-size:14px"></div>
       <div id="speakResult"></div>
     </div>
+  </div>
+</div>
+
+<div id="page-chat" class="page">
+  <div class="header"><button class="back-btn" onclick="backFromChat()">‹</button><h1>💬 Giao tiếp với AI</h1></div>
+  <div class="container" id="chatList"></div>
+</div>
+
+<div id="page-chat-room" class="page">
+  <div class="header"><button class="back-btn" onclick="backFromChatRoom()">‹</button><h1 id="chatRoomTitle"></h1></div>
+  <div class="container">
+    <div id="chatMessages" class="chat-messages"></div>
+    <div class="chat-input-bar">
+      <button class="chat-mic-btn" id="chatMicBtn" onclick="chatStartListening()">🎤</button>
+      <input type="text" id="chatTextInput" class="chat-text-input" placeholder="Gõ hoặc bấm mic để nói..." onkeypress="if(event.key==='Enter')chatSendText()">
+      <button class="chat-send-btn" onclick="chatSendText()">➤</button>
+    </div>
+    <div id="chatStatus" style="text-align:center;color:#666;font-size:13px;margin-top:8px;min-height:20px"></div>
   </div>
 </div>
 
@@ -158,6 +181,7 @@
 <script src="data/roadmap.js"></script>
 <script src="data/vocab.js"></script>
 <script src="data/grammar.js"></script>
+<script src="data/chat.js"></script>
 <script src="lib/core.js"></script>
 <script src="lib/ai.js"></script>
 <script src="lib/speak.js"></script>
@@ -165,6 +189,7 @@
 <script src="lib/lesson.js"></script>
 <script src="lib/vocab.js"></script>
 <script src="lib/grammar.js"></script>
+<script src="lib/chat.js"></script>
 <script src="lib/settings.js"></script>
 <script src="lib/init.js"></script>
 </body>
