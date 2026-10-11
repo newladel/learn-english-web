@@ -246,13 +246,12 @@ textarea:focus, input:focus { outline: none; border-color: #00897b; }
 }
 .level.open .level-arrow { transform: rotate(180deg); }
 
-.level-a0 .level-header { background: linear-gradient(135deg, #3f51b5, #5c6bc0); }
-.level-a1 .level-header { background: linear-gradient(135deg, #43a047, #66bb6a); }
-.level-a2 .level-header { background: linear-gradient(135deg, #f57c00, #ffa726); }
-.level-b1 .level-header { background: linear-gradient(135deg, #d81b60, #ec407a); }
-.level-b2 .level-header { background: linear-gradient(135deg, #7b1fa2, #9c27b0); }
-.level-c1 .level-header { background: linear-gradient(135deg, #c62828, #e53935); }
-
+.level-a0 .level-header { background: linear-gradient(135deg, #66bb6a, #81c784); }
+.level-a1 .level-header { background: linear-gradient(135deg, #4caf50, #66bb6a); }
+.level-a2 .level-header { background: linear-gradient(135deg, #43a047, #4caf50); }
+.level-b1 .level-header { background: linear-gradient(135deg, #388e3c, #43a047); }
+.level-b2 .level-header { background: linear-gradient(135deg, #2e7d32, #388e3c); }
+.level-c1 .level-header { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
 .level-body {
   display: none;
   background: white;
