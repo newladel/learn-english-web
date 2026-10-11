@@ -35,6 +35,11 @@
       <div class="text"><div class="title">Ngữ pháp</div><div class="sub">Công thức + ví dụ + bài tập</div></div>
       <div class="arrow">›</div>
     </button>
+    <button class="btn-big brown" onclick="showPage('irregular')">
+      <div class="icon">📋</div>
+      <div class="text"><div class="title">Động từ bất quy tắc</div><div class="sub">100 động từ thông dụng + luyện tập</div></div>
+      <div class="arrow">›</div>
+    </button>
     <button class="btn-big blue" onclick="showPage('chat')">
       <div class="icon">💬</div>
       <div class="text"><div class="title">Giao tiếp với AI</div><div class="sub">Luyện nói theo tình huống thực tế</div></div>
@@ -135,6 +140,16 @@
   <div class="container" id="grammarBody"></div>
 </div>
 
+<div id="page-irregular" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>Động từ bất quy tắc</h1></div>
+  <div class="container" id="ivList"></div>
+</div>
+
+<div id="page-iv-practice" class="page">
+  <div class="header"><button class="back-btn" onclick="showPage('irregular')">‹</button><h1>Luyện tập</h1></div>
+  <div class="container" id="ivPracticeBody"></div>
+</div>
+
 <div id="page-write" class="page">
   <div class="header"><button class="back-btn" onclick="showPage('home')">‹</button><h1>AI sửa lỗi viết</h1></div>
   <div class="container">
@@ -182,6 +197,7 @@
 <script src="data/vocab.js"></script>
 <script src="data/grammar.js"></script>
 <script src="data/chat.js"></script>
+<script src="data/irregular-verbs.js"></script>
 <script src="lib/core.js"></script>
 <script src="lib/ai.js"></script>
 <script src="lib/speak.js"></script>
@@ -190,6 +206,7 @@
 <script src="lib/vocab.js"></script>
 <script src="lib/grammar.js"></script>
 <script src="lib/chat.js"></script>
+<script src="lib/irregular-verbs.js"></script>
 <script src="lib/settings.js"></script>
 <script src="lib/init.js"></script>
 </body>
