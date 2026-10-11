@@ -227,9 +227,137 @@ const GRAMMAR = [
     mistakes: [
       { wrong: 'Never I have seen...', right: 'Never have I seen...', note: 'Phải đảo trợ động từ lên trước chủ ngữ' }
     ],
+
     exercises: [
       { q: 'Never ___ I ___ (see) such a thing.', a: 'have / seen' },
       { q: 'Rarely ___ she ___ (go) out.', a: 'does / go' }
+    ]
+  },
+
+  /* ========== 6 CHỦ ĐIỂM MỚI ========== */
+  {
+    id: 'g14', level: 'A1', title: 'Mạo từ a / an / the',
+    formula: 'a/an + danh từ số ít | the + đã xác định',
+    when: 'a/an dùng cho danh từ chưa xác định, số ít. the dùng khi cả người nói và người nghe đều biết đang nói về cái gì.',
+    examples: [
+      { type: 'a/an (lần đầu nhắc)', en: 'I have a cat. The cat is white.', vi: 'Tôi có một con mèo. Con mèo đó màu trắng.' },
+      { type: 'an (trước nguyên âm)', en: 'She is an engineer.', vi: 'Cô ấy là kỹ sư.' },
+      { type: 'the (duy nhất)', en: 'The sun rises in the east.', vi: 'Mặt trời mọc ở hướng đông.' }
+    ],
+    mistakes: [
+      { wrong: 'I have a apple.', right: 'I have an apple.', note: 'Dùng "an" trước từ bắt đầu bằng nguyên âm (a,e,i,o,u)' },
+      { wrong: 'I am a engineer.', right: 'I am an engineer.', note: 'Engineer bắt đầu bằng nguyên âm e → dùng an' },
+      { wrong: 'I like the coffee.', right: 'I like coffee.', note: 'Nói chung chung thì không dùng "the"' }
+    ],
+    exercises: [
+      { q: 'I have ___ cat and ___ dog.', a: 'a / a' },
+      { q: 'She is ___ teacher.', a: 'a' },
+      { q: 'He eats ___ orange every morning.', a: 'an' },
+      { q: '___ sun is very bright today.', a: 'The' }
+    ]
+  },
+  {
+    id: 'g15', level: 'A1', title: 'Giới từ thời gian in / on / at',
+    formula: 'at + giờ | on + thứ/ngày | in + tháng/năm/buổi',
+    when: 'Phân biệt 3 giới từ thời gian theo quy tắc: at giờ cụ thể, on ngày cụ thể, in khoảng thời gian dài.',
+    examples: [
+      { type: 'at + giờ', en: 'I wake up at 6 AM.', vi: 'Tôi thức dậy lúc 6 giờ sáng.' },
+      { type: 'on + thứ/ngày', en: 'I have class on Monday.', vi: 'Tôi có lớp vào thứ Hai.' },
+      { type: 'in + tháng/năm', en: 'She was born in 1995.', vi: 'Cô ấy sinh năm 1995.' },
+      { type: 'in + buổi', en: 'I study in the morning.', vi: 'Tôi học vào buổi sáng.' }
+    ],
+    mistakes: [
+      { wrong: 'I wake up in 6 AM.', right: 'I wake up at 6 AM.', note: 'Giờ cụ thể → dùng "at"' },
+      { wrong: 'I have class in Monday.', right: 'I have class on Monday.', note: 'Thứ → dùng "on"' },
+      { wrong: 'I was born on 1995.', right: 'I was born in 1995.', note: 'Năm → dùng "in"' }
+    ],
+    exercises: [
+      { q: 'I go to school ___ 7 AM.', a: 'at' },
+      { q: 'My birthday is ___ June.', a: 'in' },
+      { q: 'We have a meeting ___ Friday.', a: 'on' },
+      { q: 'She studies ___ the evening.', a: 'in' }
+    ]
+  },
+  {
+    id: 'g16', level: 'A1', title: 'Giới từ chỉ vị trí',
+    formula: 'in / on / under / behind / next to / between',
+    when: 'Diễn tả vị trí của người/vật so với vật khác.',
+    examples: [
+      { type: 'in (trong)', en: 'The cat is in the box.', vi: 'Con mèo ở trong hộp.' },
+      { type: 'on (trên bề mặt)', en: 'The book is on the table.', vi: 'Cuốn sách ở trên bàn.' },
+      { type: 'under (dưới)', en: 'The dog is under the chair.', vi: 'Con chó ở dưới ghế.' },
+      { type: 'behind (phía sau)', en: 'The car is behind the house.', vi: 'Xe hơi ở phía sau nhà.' },
+      { type: 'next to (bên cạnh)', en: 'The bank is next to the post office.', vi: 'Ngân hàng ở cạnh bưu điện.' },
+      { type: 'between (giữa 2 vật)', en: 'The shop is between the bank and the park.', vi: 'Cửa hàng ở giữa ngân hàng và công viên.' }
+    ],
+    mistakes: [
+      { wrong: 'The book is in the table.', right: 'The book is on the table.', note: 'Trên bề mặt → dùng "on"' },
+      { wrong: 'The cat is on the box (nghĩa khác).', right: 'The cat is in the box.', note: '"in" = bên trong, "on" = trên mặt' }
+    ],
+    exercises: [
+      { q: 'The cat is ___ the box.', a: 'in' },
+      { q: 'The pen is ___ the desk.', a: 'on' },
+      { q: 'The dog is ___ the table.', a: 'under' },
+      { q: 'The bank is ___ to the school.', a: 'next' }
+    ]
+  },
+  {
+    id: 'g17', level: 'A2', title: 'Much / Many / A lot of',
+    formula: 'much + không đếm được | many + đếm được | a lot of + cả 2',
+    when: 'Diễn tả số lượng nhiều. Much/Many thường dùng trong câu phủ định và nghi vấn. A lot of dùng trong câu khẳng định.',
+    examples: [
+      { type: 'much (không đếm được)', en: 'I do not have much time.', vi: 'Tôi không có nhiều thời gian.' },
+      { type: 'many (đếm được)', en: 'How many books do you have?', vi: 'Bạn có bao nhiêu cuốn sách?' },
+      { type: 'a lot of (khẳng định)', en: 'She has a lot of friends.', vi: 'Cô ấy có nhiều bạn.' }
+    ],
+    mistakes: [
+      { wrong: 'I have many money.', right: 'I have much money.', note: 'Money là không đếm được → dùng much' },
+      { wrong: 'How much books?', right: 'How many books?', note: 'Books đếm được → dùng many' }
+    ],
+    exercises: [
+      { q: 'How ___ water do you drink?', a: 'much' },
+      { q: 'How ___ students are there?', a: 'many' },
+      { q: 'I have ___ friends in Hanoi.', a: 'a lot of' }
+    ]
+  },
+  {
+    id: 'g18', level: 'A2', title: 'Few / A few / Little / A little',
+    formula: 'few + đếm được (ít, gần như không) | a few + đếm được (một vài) | little + không đếm được | a little + không đếm được',
+    when: 'Phân biệt "ít" (thiếu, không đủ) và "một chút" (có, đủ dùng). Có "a" → tích cực. Không "a" → tiêu cực.',
+    examples: [
+      { type: 'few (ít, không đủ)', en: 'Few students passed the exam.', vi: 'Rất ít học sinh đỗ.' },
+      { type: 'a few (một vài, đủ)', en: 'I have a few friends here.', vi: 'Tôi có một vài người bạn ở đây.' },
+      { type: 'little (ít, không đủ)', en: 'There is little water left.', vi: 'Còn rất ít nước.' },
+      { type: 'a little (một chút, đủ)', en: 'I need a little sugar.', vi: 'Tôi cần một chút đường.' }
+    ],
+    mistakes: [
+      { wrong: 'I have few money.', right: 'I have little money.', note: 'Money không đếm được → dùng little' },
+      { wrong: 'A few water.', right: 'A little water.', note: 'Water không đếm được → dùng a little' }
+    ],
+    exercises: [
+      { q: 'I have ___ books, maybe 3 or 4.', a: 'a few' },
+      { q: 'There is ___ time left, we must hurry.', a: 'little' },
+      { q: 'Can I have ___ salt?', a: 'a little' }
+    ]
+  },
+  {
+    id: 'g19', level: 'A1', title: 'Some / Any',
+    formula: 'some + câu khẳng định | any + câu phủ định và nghi vấn',
+    when: 'Some dùng cho câu khẳng định (có cái gì đó). Any dùng cho câu phủ định và câu hỏi.',
+    examples: [
+      { type: 'some (khẳng định)', en: 'I have some apples.', vi: 'Tôi có một vài quả táo.' },
+      { type: 'any (phủ định)', en: 'I do not have any apples.', vi: 'Tôi không có quả táo nào.' },
+      { type: 'any (nghi vấn)', en: 'Do you have any apples?', vi: 'Bạn có quả táo nào không?' }
+    ],
+    mistakes: [
+      { wrong: 'I do not have some money.', right: 'I do not have any money.', note: 'Câu phủ định → dùng any' },
+      { wrong: 'Do you have some questions?', right: 'Do you have any questions?', note: 'Câu hỏi → dùng any' }
+    ],
+    exercises: [
+      { q: 'I have ___ questions for you.', a: 'some' },
+      { q: 'Do you have ___ brothers or sisters?', a: 'any' },
+      { q: 'I do not have ___ time today.', a: 'any' },
+      { q: 'Would you like ___ tea?', a: 'some' }
     ]
   }
 ];
