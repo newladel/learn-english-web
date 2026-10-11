@@ -19,6 +19,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .btn-big.purple { background: #7b1fa2; }
 .btn-big.green { background: #43a047; }
 .btn-big.pink { background: #d81b60; }
+.btn-big.blue { background: #1976d2; }
 .btn-big .icon { font-size: 32px; margin-right: 16px; }
 .btn-big .text { flex: 1; }
 .btn-big .title { font-size: 17px; font-weight: 700; }
@@ -106,9 +107,8 @@ textarea:focus, input:focus { outline: none; border-color: #00897b; }
 .alphabet-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 8px; width: 100%; }
 .letter-tile { background: linear-gradient(135deg,#3f51b5,#5e35b1); color: white; border-radius: 8px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,.15); }
 .emoji-visual { font-size: 50px; text-align: center; padding: 10px; }
-/* ========== CHAT VOICE ========== */
-.btn-big.blue { background: #1976d2; }
 
+/* ========== CHAT VOICE ========== */
 .chat-situation-card {
   display: flex;
   align-items: center;
@@ -211,6 +211,7 @@ textarea:focus, input:focus { outline: none; border-color: #00897b; }
   flex-shrink: 0;
 }
 .chat-send-btn:active { opacity: 0.85; }
+
 /* ========== ROADMAP ACCORDION ========== */
 .level { padding: 0; overflow: hidden; }
 .level-header {
@@ -245,7 +246,6 @@ textarea:focus, input:focus { outline: none; border-color: #00897b; }
 }
 .level.open .level-arrow { transform: rotate(180deg); }
 
-/* Màu từng cấp */
 .level-a0 .level-header { background: linear-gradient(135deg, #3f51b5, #5c6bc0); }
 .level-a1 .level-header { background: linear-gradient(135deg, #43a047, #66bb6a); }
 .level-a2 .level-header { background: linear-gradient(135deg, #f57c00, #ffa726); }
@@ -253,7 +253,6 @@ textarea:focus, input:focus { outline: none; border-color: #00897b; }
 .level-b2 .level-header { background: linear-gradient(135deg, #7b1fa2, #9c27b0); }
 .level-c1 .level-header { background: linear-gradient(135deg, #c62828, #e53935); }
 
-/* Body */
 .level-body {
   display: none;
   background: white;
